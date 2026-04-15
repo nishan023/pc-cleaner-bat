@@ -10,7 +10,8 @@ This tool cleans common Windows and browser junk files to free disk space and re
 
 ## Download
 
-- Latest release: https://github.com/nishan023/pc-cleaner-bat/releases/latest
+- [![Download CleanCDrive.bat](https://img.shields.io/badge/Download-CleanCDrive.bat-00C853?style=for-the-badge&logo=windows)](https://github.com/nishan023/pc-cleaner-bat/releases/download/v1.0.0/CleanCDrive.bat)
+- Direct download: https://github.com/nishan023/pc-cleaner-bat/releases/download/v1.0.0/CleanCDrive.bat
 - All releases: https://github.com/nishan023/pc-cleaner-bat/releases
 
 If you want to use the source directly, download or clone the repository from:
