@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CleanCDrive.bat | Windows Cleanup Tool</title>
+  <style>
+    :root {
+      --bg: #0b0f12;
+      --panel: #0f151a;
+      --panel-2: #121b22;
+      --text: #e6f0f4;
+      --muted: #8fa3ad;
+      --accent: #7cb342;
+      --accent-2: #5c8f2a;
+      --grid: rgba(124, 179, 66, 0.15);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "JetBrains Mono", "Fira Code", Consolas, "Courier New", monospace;
+      color: var(--text);
+      background:
+        radial-gradient(900px 300px at 15% -10%, rgba(124, 179, 66, 0.15), transparent 60%),
+        radial-gradient(700px 250px at 80% 0%, rgba(0, 169, 255, 0.12), transparent 60%),
+        linear-gradient(180deg, #0a0e12 0%, #0b1014 100%);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 40px 16px;
+    }
+
+    .shell {
+      width: min(980px, 100%);
+      background: var(--panel);
+      border: 1px solid #1a252d;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .shell-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      background: var(--panel-2);
+      border-bottom: 1px solid #1a252d;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #2a3944;
+      border: 1px solid #1b2831;
+    }
+
+    .dot:nth-child(1) { background: #eb6a5e; }
+    .dot:nth-child(2) { background: #f4bf4f; }
+    .dot:nth-child(3) { background: #61c454; }
+
+    .shell-title {
+      margin-left: 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .content {
+      padding: 28px 28px 34px;
+      display: grid;
+      gap: 24px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(124, 179, 66, 0.12);
+      color: var(--accent);
+      border: 1px solid rgba(124, 179, 66, 0.4);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      margin: 0;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--accent);
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0b0f12;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(124, 179, 66, 0.2);
+    }
+
+    .btn.secondary {
+      background: transparent;
+      color: var(--text);
+      border-color: #2a3944;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: rgba(15, 21, 26, 0.7);
+      border: 1px solid #1a252d;
+      border-radius: 12px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(124, 179, 66, 0.06), transparent);
+      opacity: 0;
+      transition: opacity 160ms ease;
+    }
+
+    .card:hover::after {
+      opacity: 1;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .terminal {
+      border: 1px solid #1a252d;
+      background: #0b1014;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 13px;
+      color: #cfe3ea;
+    }
+
+    .terminal .prompt {
+      color: var(--accent);
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="shell-header">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="shell-title">clean-cdrive</span>
+    </div>
+
+    <div class="content">
+      <span class="tag">Windows cleanup tool</span>
+      <h1>CleanCDrive.bat</h1>
+      <p>Cleanup script that removes Windows and browser junk files, clears caches, and helps recover disk space without bloat.</p>
+
+      <div class="cta-row">
+        <a class="btn" id="downloadBtn" href="https://github.com/nishan023/pc-cleaner-bat/releases/download/v1.0.0/CleanCDrive.bat">
+          <span>Download .bat</span>
+          <span aria-hidden="true">⬇</span>
+        </a>
+        <a class="btn secondary" href="https://github.com/nishan023/pc-cleaner-bat/releases">View releases</a>
+        <span class="hint" id="downloadHint">Direct link ready.</span>
+      </div>
+
+      <section class="grid">
+        <div class="card">
+          <h3>System temp sweep</h3>
+          <p>Clears user + Windows temp folders to remove old, safe-to-delete files.</p>
+        </div>
+        <div class="card">
+          <h3>Cache resets</h3>
+          <p>Flushes DNS, thumbnails, and Windows update caches to unclog storage.</p>
+        </div>
+        <div class="card">
+          <h3>Browser cleanup</h3>
+          <p>Targets Chrome and Edge cache directories to reclaim disk space.</p>
+        </div>
+        <div class="card">
+          <h3>Legacy removal</h3>
+          <p>Optionally removes Windows.old for users ready to drop prior installs.</p>
+        </div>
+      </section>
+
+      <section class="terminal" aria-label="Usage">
+        <div><span class="prompt">C:\\&gt;</span> CleanCDrive.bat</div>
+        <div>Enter your choice (A or M):</div>
+        <div class="hint">A = auto mode, M = manual confirmation.</div>
+      </section>
+
+      <div class="footer">Run as Administrator for best results. Developed by Nishan • <a href="https://github.com/nishan023" style="color: inherit; text-decoration: none; border-bottom: 1px solid rgba(143, 163, 173, 0.4);">GitHub</a></div>
+    </div>
+  </main>
+
+  <script>
+    const downloadBtn = document.getElementById("downloadBtn");
+    const downloadHint = document.getElementById("downloadHint");
+
+    downloadBtn.addEventListener("click", () => {
+      downloadHint.textContent = "Opening direct download in your browser...";
+      downloadHint.style.color = "#cfe3ea";
+    });
+  </script>
+</body>
+</html>
