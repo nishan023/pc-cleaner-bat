@@ -259,6 +259,78 @@
 
     .hero-meta a:hover { color: var(--ink); }
 
+    /* PowerShell Quick Run Box */
+    .ps-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      margin-bottom: 16px;
+      max-width: 520px;
+    }
+
+    .ps-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--ink-secondary);
+      margin-bottom: 6px;
+    }
+
+    .ps-label strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .ps-cmd-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 7px 10px;
+    }
+
+    .ps-cmd {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: var(--ink);
+      overflow-x: auto;
+      white-space: nowrap;
+      user-select: all;
+    }
+
+    .copy-btn {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      color: var(--ink-secondary);
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 12px;
+      font-family: var(--sans);
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+
+    .copy-btn:hover {
+      color: var(--ink);
+      border-color: var(--ink-muted);
+    }
+
+    .copy-btn.copied {
+      color: var(--accent);
+      border-color: var(--accent-border);
+      background: var(--accent-soft);
+    }
+
     /* Authentic Windows Terminal Preview */
     .win-term {
       background: var(--term-bg);
@@ -723,6 +795,23 @@
             <a id="all-releases-btn" class="btn btn-outline" href="https://github.com/nishan023/pc-cleaner-bat/releases" target="_blank" rel="noopener">
               All Releases
             </a>
+          </div>
+
+          <div class="ps-box">
+            <div class="ps-label">
+              <span>Run directly on <strong>PowerShell</strong> with <strong>Administrator access</strong></span>
+              <span><code>/clean</code> or <code>/cleanup</code></span>
+            </div>
+            <div class="ps-cmd-row">
+              <code class="ps-cmd" id="ps-command">irm https://get.dhakalnishan.com.np/clean | iex</code>
+              <button type="button" class="copy-btn" id="copy-ps-btn" aria-label="Copy PowerShell command" title="Copy command">
+                <svg id="copy-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span id="copy-label">Copy</span>
+              </button>
+            </div>
           </div>
 
           <div class="hero-meta" id="hero-meta">
@@ -1218,6 +1307,45 @@
     }
 
     init();
+
+    (function setupCopyButton() {
+      const btn = document.getElementById('copy-ps-btn');
+      const cmdEl = document.getElementById('ps-command');
+      const label = document.getElementById('copy-label');
+      const icon = document.getElementById('copy-icon');
+      if (!btn || !cmdEl) return;
+
+      const copySvg = '<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>';
+      const checkSvg = '<polyline points="20 6 9 17 4 12"></polyline>';
+      let timer = null;
+
+      btn.addEventListener('click', async () => {
+        const text = cmdEl.textContent.trim();
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+
+        btn.classList.add('copied');
+        icon.innerHTML = checkSvg;
+        label.textContent = 'Copied';
+
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          btn.classList.remove('copied');
+          icon.innerHTML = copySvg;
+          label.textContent = 'Copy';
+        }, 1800);
+      });
+    })();
   </script>
 </body>
 </html>

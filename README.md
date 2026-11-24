@@ -11,6 +11,16 @@ A portable, native Windows CMD cleanup tool that scans and removes common Window
 - **Website:** https://clean.dhakalnishan.com.np/
 - **Repository:** https://github.com/nishan023/pc-cleaner-bat
 
+## Quick Run (PowerShell)
+
+Open **PowerShell as Administrator** and run:
+
+```powershell
+irm https://get.dhakalnishan.com.np/clean | iex
+```
+
+*(Both `/clean` and `/cleanup` work.)*
+
 ## Download
 
 ### Latest Version (v2.0.0)
